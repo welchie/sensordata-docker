@@ -1,0 +1,31 @@
+version: "3"
+services:
+  sensor-api:
+    image: "welchie99/dynamo.sensordata:${SENSOR_API_VERSION}"
+    ports:
+      - "80:8080"
+    environment:
+      - SENSOR_API_VERSION=${SENSOR_API_VERSION}
+      - SENSOR_UI_VERSION=${SENSOR_UI_VERSION}
+    healthcheck:
+      test: netstat -lan | grep 8080 | wc -l
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - mynet
+  sensor-ui:
+    image: "welchie99/sensor-ui:${SENSOR_UI_VERSION}"
+    ports:
+      - "3000:3000"
+    healthcheck:
+      test: netstat -lan | grep 3000 | wc -l
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - mynet
+
+networks:
+  mynet:
+
